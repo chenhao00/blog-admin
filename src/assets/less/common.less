@@ -10,3 +10,43 @@ a {
   text-decoration: none;
   -webkit-touch-callout: none
 }
+.el-form {
+  max-width: 1000px;
+  .el-form-item {
+    display: flex;
+    margin-bottom: 18px;
+    .el-form-item__label {
+      display: inline-table;
+      width: 80px;
+    }
+    .el-input__inner {
+      height: 32px;
+    }
+    &.button_wrap {
+      margin-left: 70px;
+    }
+    .el-tag {
+      margin-right: 10px;
+    }
+  }
+  &.query-form {
+    .el-form-item {
+      display: inline-flex;
+      .el-form-item__label {
+        width: 70px !important;
+        text-align: left;
+      }
+    }
+  }
+}
+.threeBtn {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-left: 0 !important;
+}
+.pagination {
+  margin-top: 20px;
+}
+.normal-table {
+  margin-top: 20px;
+}

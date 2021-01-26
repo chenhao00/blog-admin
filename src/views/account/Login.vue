@@ -14,21 +14,21 @@
             v-model="account">
             <i slot="prefix" class="el-input__icon el-icon-mobile-phone"></i>
           </el-input>
-          <!-- <el-input
+          <el-input
             placeholder="请输入密码"
             v-model="password">
             <i slot="prefix" class="el-input__icon el-icon-unlock"></i>
-          </el-input> -->
-          <div class="auth_code">
+          </el-input>
+          <!-- <div class="auth_code">
             <el-input
               placeholder="请输入验证码"
               v-model="authCode">
               <i slot="prefix" class="el-input__icon el-icon-message"></i>
             </el-input>
             <el-button type="primary" round>获取验证码</el-button>
-          </div>
+          </div> -->
           <div class="login-btn">
-            <el-button type="primary" round>立即登录</el-button>
+            <el-button type="primary" round @click="login">立即登录</el-button>
           </div>
         </el-col>
       </el-row>
@@ -41,7 +41,23 @@ export default {
   data() {
     return {
       account: '',
-      authCode: ''
+      password: ''
+    }
+  },
+  methods: {
+    async login() {
+      const path = '/api/v1/admin/users/login';
+      const postData = {
+        name: this.account,
+        password: this.password
+      };
+      const res = await this.$http.post(path, postData);
+      if (res.code === 0) {
+        localStorage.setItem('user', JSON.stringify(res.data));
+        window.location.reload();
+      } else {
+        this.$requestStatus(res);
+      }
     }
   }
 }
@@ -58,6 +74,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;
   .login-container {
     max-width: 560px;
     max-height: 400px;

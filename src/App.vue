@@ -4,7 +4,6 @@
     <div class="app_container">
       <SlideBar />
       <main class="content">
-        <BreadCrumb />
         <router-view />
       </main>
     </div>
@@ -16,24 +15,53 @@
 import Login from './views/account/Login';
 import TopBar from './components/common/TopBar';
 import SlideBar from './components/common/SlideBar';
-import BreadCrumb from './components/common/BreadCrumb';
 
 export default {
   name: 'App',
   data() {
     return {
-      isHaveLogin: false
+      isHaveLogin: true
     }
   },
   components: {
     Login,
     TopBar,
-    SlideBar,
-    BreadCrumb
+    SlideBar
+  },
+  created() {
+    const loginInfo = localStorage.getItem('user');
+    if (loginInfo) {
+      this.isHaveLogin = false;
+    }
+  },
+  mounted() {
+    // 监听跳转登陆页面
+    this.$bus.$on('showLogin', () => {
+      this.isHaveLogin = true;
+    });
   }
 }
 </script>
 
 <style lang="less">
 @import './assets/less/common.less';
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .app_container {
+    height: calc(100% - 60px);
+    display: flex;
+    .content {
+      flex: 1;
+      overflow-y: scroll;
+      padding: 20px;
+    }
+  }
+  .breadcrumb {
+    span, i {
+      color: #fff !important;
+    }
+  }
+}
 </style>

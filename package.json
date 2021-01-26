@@ -11,7 +11,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^3.2.3",
+    "axios": "^0.20.0",
     "element-ui": "^2.13.2",
+    "tinymce": "^5.5.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
