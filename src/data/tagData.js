@@ -73,4 +73,4 @@ const tagData = [
   }
 ];
 
-module.exports = tagData;
+export default tagData;

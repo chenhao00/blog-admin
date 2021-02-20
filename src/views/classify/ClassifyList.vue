@@ -8,26 +8,26 @@
       style="width: 100%">
       <el-table-column label="序号" type="index" width="60">
       </el-table-column>
-      <el-table-column label="分类" width="100">
+      <el-table-column label="分类">
         <template slot-scope="scope">
-          {{ scope.row.title }}
+          {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="文章数" width="100">
+      <el-table-column label="文章个数" width="100">
         <template slot-scope="scope">
-          {{ scope.row.num }}
+          {{ scope.row.articles.length }}
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-button
             size="mini"
             class="threeBtn"
             @click="handleView(scope.$index, scope.row)">管理</el-button>
-            <el-button
+          <!-- <el-button
             size="mini"
             class="threeBtn"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
           <el-button
             size="mini"
             type="danger"
@@ -44,7 +44,7 @@ export default {
   name: 'ClassifyList',
   data() {
     return {
-
+      tableData: []
     };
   },
   created() {
@@ -55,11 +55,41 @@ export default {
       const path = '/api/v1/admin/classify';
 			const res = await this.$http.get(path);
 			if (res.code === 0) {
-        this.classifyOptions = res.data.list.map(item => ({ label: item.name, value: item.name }));
-        this.classifyOptions.unshift({ label: '不限', value: '' });
+        this.tableData = res.data.list;
 			} else {
 				this.$requestStatus(res);
 			}
+    },
+    // 管理文章
+    async handleView(index, row) {
+      this.$router.push({ path: `/classify/classifyEddit/${row._id}` });
+    },
+    // 确认删除
+    handleDelete(index, row) {
+      this.$confirm('此操作将删除此分类, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.delete(row._id);
+      }).catch(() => {
+      });
+    },
+    // 删除
+    async delete(id) {
+      const path = `/api/v1/admin/classify/${id}`;
+      const res = await this.$http.delete(path);
+      this.loading = true;
+      if (res.code === 0) {
+        this.loading = false;
+        this.fetch();
+        this.$message({
+          type: 'success',
+          message: '删除成功！'
+        });
+      } else {
+        this.$requestStatus(res);
+      }
     }
   }
 }

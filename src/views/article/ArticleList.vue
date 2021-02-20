@@ -14,8 +14,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="文章分类" prop="classify">
-        <el-select v-model="form.classify" placeholder="文章分类">
+      <el-form-item label="文章分类" prop="classifyName">
+        <el-select v-model="form.classifyName" placeholder="文章分类">
           <el-option
             v-for="item in classifyOptions"
             :key="item.value"
@@ -44,31 +44,36 @@
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="文章标签">
+      <el-table-column label="文章标签" width="120">
         <template slot-scope="scope">
           <span v-for="(item, index) in scope.row.articleTags" :key="item.id">
             {{ item }}<span v-if="index !== scope.row.articleTags.length - 1"><br /></span>
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="文章分类">
+      <el-table-column label="文章分类" width="120">
         <template slot-scope="scope">
           {{ scope.row.classifyName }}
         </template>
       </el-table-column>
-      <el-table-column label="文章类型">
+      <el-table-column label="文章类型" width="90">
         <template slot-scope="scope">
           {{ scope.row.mode === 1 ? '原创' : '转载' }}
         </template>
       </el-table-column>
-      <el-table-column label="发布形式">
+      <el-table-column label="发布形式" width="90">
         <template slot-scope="scope">
           {{scope.row.way === 1 ? '公开' : '私密'}}
         </template>
       </el-table-column>
-      <el-table-column label="更新时间">
+      <el-table-column label="创建时间" width="180">
         <template slot-scope="scope">
-          {{ scope.row.createTime }}
+          {{ scope.row.createTime | formateDate }}
+        </template>
+      </el-table-column>
+      <el-table-column label="更新时间" width="180">
+        <template slot-scope="scope">
+          {{ scope.row.updateTime | formateDate }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="170px">
@@ -101,6 +106,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import FilterQuery from '../../lib/filterQuery';
 import CalCurrentPage from '../../lib/calCurrentPage';
 
@@ -110,7 +116,7 @@ export default {
     return {
       form: {
         title: '',
-        classify: null,
+        classifyName: null,
         mode: null
       },
       classifyOptions: [],
@@ -123,7 +129,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      loading: false
+      loading: false,
+      moment
     }
   },
   created() {
