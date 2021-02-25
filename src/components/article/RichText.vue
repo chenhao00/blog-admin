@@ -5,6 +5,7 @@
       :disabled="disabled"
       :init="init">
     </Editor>
+    <!-- <div v-if="disabled" class="mask" :style="{ height: `${height}px` }"></div> -->
   </div>
 </template>
 
@@ -30,6 +31,10 @@ export default {
       type: Boolean,
       default: false
     },
+    height: {
+      type: Number,
+      default: 300
+    },
     plugins: {
       type: [String, Array],
       default: 'image code'
@@ -45,7 +50,7 @@ export default {
         // language_url: '/static/tinymce/langs/zh_CN.js',
         // language: 'zh_CN',
         skin_url: '/static/tinymce/skins/ui/oxide',
-        height: 500,
+        height: this.height,
         plugins: this.plugins,
         toolbar: this.toolbar,
         branding: false,
@@ -65,7 +70,7 @@ export default {
           });
         }
       },
-      myValue: this.value
+      myValue: ''
     }
   },
   mounted() {
@@ -73,7 +78,7 @@ export default {
   },
   watch: {
     value(newValue) {
-      this.myValue = newValue
+      this.myValue = newValue;
     },
     myValue(newValue) {
       this.$emit('change', newValue);
@@ -81,3 +86,18 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="less">
+.tinymce-editor {
+  position: relative;
+  .mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background-color: #F5F7FA;
+    opacity: .7;
+    cursor: not-allowed;
+  }
+}
+</style>

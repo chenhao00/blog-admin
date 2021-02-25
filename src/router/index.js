@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import blog from './modules/blog';
-import user from './modules/user';
 
 const Home = () => import('../views/Home.vue');
 
@@ -19,7 +18,6 @@ export default new Router({
         icon: 'monitor'
       }
     },
-    blog,
-    user
+    blog
   ]
 })

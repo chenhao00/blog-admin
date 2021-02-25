@@ -8,6 +8,7 @@
 				<RichText
 					:disabled="disabled"
 					:value="form.contents"
+					:height="500"
 					@change="this.onRichChange"
 				/>
 			</el-form-item>
@@ -43,7 +44,6 @@
 						v-model="classifyValue"
 						ref="saveClassifyInput"
 						size="small"
-						@keyup.enter.native="handleClassifyConfirm"
 						@blur="handleClassifyConfirm"
 						v-focus
 					>
@@ -186,7 +186,9 @@ export default {
 		submit(formName) {
 			this.$refs[formName].validate(async (valid) => {
 				if (valid) {
-					this.classifyId = this.classifyList.find((item) => item.name === this.form.classifyName)._id;
+					if (this.classifyData.length > 0) {
+						this.classifyId = this.classifyList.find((item) => item.name === this.form.classifyName)._id;
+					}
 					this.loading = true;
 					this.httpData();
 				} else {
@@ -256,12 +258,17 @@ export default {
 		// 分类输入确认框
 		handleClassifyConfirm() {
 			this.form.classifyName = this.classifyValue;
+			// 判断输入的分类是否已存在
+			this.classifyList.map(item => {
+				if (item.name === this.form.classifyName) {
+					this.classifyData.push(this.form.classifyName);
+				}
+			});
 			this.classifyVisible = false;
 			this.classifyValue = '';
 		},
 		// 复选框选择
 		classifyChange() {
-			console.log(this.classifyData);
 			this.form.classifyName = this.classifyData[0];
 		}
 	}

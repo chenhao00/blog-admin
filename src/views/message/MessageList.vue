@@ -13,17 +13,22 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="评论文章" width="180">
-        <template slot-scope="scope">
-          {{ scope.row.commentArticle.title }}
-        </template>
-      </el-table-column>
-      <el-table-column label="评论内容">
+      <el-table-column label="留言内容">
         <template slot-scope="scope">
           <span v-html="scope.row.content" class="content"></span>
         </template>
       </el-table-column>
-      <el-table-column label="评论时间" width="160">
+      <el-table-column label="回复内容">
+        <template slot-scope="scope">
+          <span v-html="scope.row.replay" class="content"></span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" width="80">
+        <template slot-scope="scope">
+          {{ scope.row.replay ? '已回复' : '未回复' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="留言时间" width="160">
         <template slot-scope="scope">
           {{ scope.row.createTime | formateDate }}
         </template>
@@ -33,22 +38,17 @@
           {{ scope.row.replayTime | formateDate }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="80">
-        <template slot-scope="scope">
-          {{ scope.row.replay ? '已回复' : '未回复' }}
-        </template>
-      </el-table-column>
       <el-table-column label="操作" width="210">
         <template slot-scope="scope">
             <el-button
             size="mini"
             class="threeBtn"
-            @click="handleEdit(scope.$index, scope.row)">回复评论</el-button>
+            @click="handleEdit(scope.$index, scope.row)">回复留言</el-button>
           <el-button
             size="mini"
             type="danger"
             class="threeBtn"
-            @click="handleDelete(scope.$index, scope.row)">删除评论</el-button>
+            @click="handleDelete(scope.$index, scope.row)">删除留言</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -67,7 +67,7 @@
 import CalCurrentPage from '../../lib/calCurrentPage';
 
 export default {
-  name: 'CommentList',
+  name: 'MessageList',
   data() {
     return {
       tableData: [],
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     async fetch() {
-      const path = `/api/v1/admin/comment?page=${this.currentPage}&pageSize=${this.pageSize}`;
+      const path = `/api/v1/admin/message?page=${this.currentPage}&pageSize=${this.pageSize}`;
 			const res = await this.$http.get(path);
 			if (res.code === 0) {
         this.tableData = res.data.list;
@@ -93,11 +93,11 @@ export default {
     },
     // 回复
     handleEdit(index, row) {
-      this.$router.push({ path: `/comment/commentReplay/${row._id}` });
+      this.$router.push({ path: `/message/messageReplay/${row._id}` });
     },
     // 确认删除
     handleDelete(index, row) {
-      this.$confirm('此操作将删除此评论, 是否继续?', '提示', {
+      this.$confirm('此操作将删除此留言, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -108,7 +108,7 @@ export default {
     },
     // 删除
     async delete(id) {
-      const path = `/api/v1/admin/comment/${id}`;
+      const path = `/api/v1/admin/message/${id}`;
       const res = await this.$http.delete(path);
       this.loading = true;
       if (res.code === 0) {

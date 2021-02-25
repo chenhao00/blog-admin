@@ -2,8 +2,11 @@
 const ArticleList = () => import('../../views/article/ArticleList.vue'); // 博客列表
 const ArticleEddit = () => import('../../views/article/ArticleEddit.vue'); // 博客新增和编辑
 const CommentList = () => import('../../views/comment/CommentList.vue'); // 评论列表
+const CommentReplay = () => import('../../views/comment/CommentReplay.vue'); // 回复评论
 const ClassifyList = () => import('../../views/classify/ClassifyList.vue'); // 分类专栏
 const ClassifyEddit = () => import('../../views/classify/ClassifyEddit.vue'); // 分类编辑
+const MessageList = () => import('../../views/message/MessageList.vue'); // 留言板列表
+const MessageReplay = () => import('../../views/message/MessageReplay.vue'); // 回复留言
 
 const Container = {
   template: `
@@ -73,6 +76,14 @@ const router = {
           meta: {
             title: '列表'
           }
+        },
+        {
+          path: '/comment/commentReplay/:id',
+          name: 'CommentReplay',
+          component: CommentReplay,
+          meta: {
+            title: '回复'
+          }
         }
       ]
     },
@@ -94,11 +105,38 @@ const router = {
           }
         },
         {
-          path: '/classify/classifyEddit',
+          path: '/classify/classifyEddit/:id',
           name: 'ClassifyEddit',
           component: ClassifyEddit,
           meta: {
             title: '编辑'
+          }
+        }
+      ]
+    },
+    {
+      path: '/message/messageList',
+      name: 'Message',
+      component: Container,
+      meta: {
+        title: '留言管理',
+        showChildren: false
+      },
+      children: [
+        {
+          path: '/message/messageList',
+          name: 'MessageList',
+          component: MessageList,
+          meta: {
+            title: '列表'
+          }
+        },
+        {
+          path: '/message/messageReplay/:id',
+          name: 'MessageReplay',
+          component: MessageReplay,
+          meta: {
+            title: '回复'
           }
         }
       ]
