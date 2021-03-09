@@ -1,6 +1,6 @@
 // 生产环境地址
 const configProduction = {
-  backendBaseUrl: ''
+  backendBaseUrl: 'http://halo-chen.top/api'
 };
 
 // 测试环境地址
